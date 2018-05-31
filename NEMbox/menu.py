@@ -163,12 +163,12 @@ class Menu(object):
             log.error(e)
             return 0
 
-    def start_fork(self, version):
+    def start_fork(self, version, ords=[]):
         pid = os.fork()
         if pid == 0:
             Menu().update_alert(version)
         else:
-            Menu().start()
+            Menu().start(ords)
 
     def _is_playlist_empty(self):
         return len(self.storage.database['player_info']['player_list']) == 0
@@ -206,7 +206,7 @@ class Menu(object):
             keybinder.unbind(self.config.get_item('global_next'))  # noqa
             keybinder.unbind(self.config.get_item('global_previous'))  # noqa
 
-    def start(self):
+    def start(self, ords):
         self.START = time.time() // 1
         self.ui.build_menu(self.datatype, self.title, self.datalist,
                            self.offset, self.index, self.step, self.START)
@@ -219,6 +219,7 @@ class Menu(object):
         self.bind_keys()  # deprecated keybinder
         show_lyrics_new_process()
         timing_flag = False
+        i = 0
         while True:
             datatype = self.datatype
             title = self.title
@@ -229,6 +230,10 @@ class Menu(object):
             stack = self.stack
             self.screen.timeout(500)
             key = self.screen.getch()
+            if i < len(ords):
+                key = ord(ords[i])
+                i = i + 1
+
             if BINDABLE:
                 keybinder.gtk.main_iteration(False)  # noqa
             self.ui.screen.refresh()

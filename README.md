@@ -1,6 +1,8 @@
 NetEase-MusicBox
 =================
-
+### 个人修改版
+添加参数：
+-c，--cmd：启动时传入的指令，如："?":自动随机播放，"0,0,1":自动播放新歌榜
 
 #### 感谢为 MusicBox 的开发付出过努力的[每一个人](https://github.com/darknessomi/musicbox/graphs/contributors)！
 

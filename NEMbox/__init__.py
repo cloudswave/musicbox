@@ -24,6 +24,7 @@ def start():
                         "--version",
                         help="show this version and exit",
                         action="store_true")
+    parser.add_argument('-c','--cmd', type=str, help = '启动时传入的指令，如："?":自动随机播放，"0,0,1":自动播放新歌榜')
     args = parser.parse_args()
     if args.version:
         latest = Menu().check_version()
@@ -33,9 +34,13 @@ def start():
             print('NetEase-MusicBox latest version:' + str(latest))
         sys.exit()
 
+    ords = []
+    if args.cmd:
+        ords = args.cmd.split(',')
+        print('cmd:', ords)
     nembox_menu = Menu()
     try:
-        nembox_menu.start_fork(version)
+        nembox_menu.start_fork(version, ords)
     except (OSError, TypeError, ValueError, KeyError):
         # clean up terminal while failed
         nembox_menu.screen.keypad(1)
